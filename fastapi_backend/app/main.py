@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 from app import models
 from app.database import Base, engine
@@ -15,6 +16,19 @@ app = FastAPI(
 )
 
 
+# Allow the frontend to communicate with the FastAPI backend.
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://127.0.0.1:5500",
+        "http://localhost:5500",
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
 app.include_router(auth.router)
 app.include_router(posts.router)
 app.include_router(comments.router)
@@ -23,6 +37,4 @@ app.include_router(likes.router)
 
 @app.get("/")
 def root():
-    return {
-        "message": "Welcome to the Blog Management API"
-    }
+    return {"message": "Welcome to the Blog Management API"}

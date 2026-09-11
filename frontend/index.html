@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Blog Management</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <header class="navbar">
+        <div class="container nav-content">
+            <h1>Blog Management</h1>
+
+            <div class="nav-actions">
+                <button id="loginNavButton" onclick="showAuth('login')">
+                    Login
+                </button>
+
+                <button id="registerNavButton" onclick="showAuth('register')">
+                    Register
+                </button>
+
+                <button id="logoutButton" onclick="logout()" class="hidden">
+                    Logout
+                </button>
+            </div>
+        </div>
+    </header>
+
+
+    <main class="container">
+
+        <section id="welcomeSection" class="hero">
+            <div>
+                <p class="eyebrow">FASTAPI BLOG PLATFORM</p>
+
+                <h2>Share your thoughts with the world.</h2>
+
+                <p>
+                    Create posts, comment on blogs, and share your
+                    favorite posts with a like.
+                </p>
+
+                <button onclick="showAuth('register')" class="primary-button">
+                    Get Started
+                </button>
+            </div>
+        </section>
+
+
+        <section id="authSection" class="auth-section hidden">
+
+            <div class="auth-card">
+
+                <div class="auth-tabs">
+                    <button
+                        id="loginTab"
+                        class="active"
+                        onclick="showAuth('login')"
+                    >
+                        Login
+                    </button>
+
+                    <button
+                        id="registerTab"
+                        onclick="showAuth('register')"
+                    >
+                        Register
+                    </button>
+                </div>
+
+
+                <form id="loginForm" onsubmit="login(event)">
+
+                    <h2>Welcome Back</h2>
+
+                    <label for="loginEmail">
+                        Email
+                    </label>
+
+                    <input
+                        type="email"
+                        id="loginEmail"
+                        placeholder="Enter your email"
+                        required
+                    >
+
+
+                    <label for="loginPassword">
+                        Password
+                    </label>
+
+                    <input
+                        type="password"
+                        id="loginPassword"
+                        placeholder="Enter your password"
+                        required
+                    >
+
+
+                    <button type="submit" class="primary-button">
+                        Login
+                    </button>
+
+                </form>
+
+
+                <form
+                    id="registerForm"
+                    class="hidden"
+                    onsubmit="register(event)"
+                >
+
+                    <h2>Create Account</h2>
+
+                    <label for="registerUsername">
+                        Username
+                    </label>
+
+                    <input
+                        type="text"
+                        id="registerUsername"
+                        placeholder="Choose a username"
+                        required
+                    >
+
+
+                    <label for="registerEmail">
+                        Email
+                    </label>
+
+                    <input
+                        type="email"
+                        id="registerEmail"
+                        placeholder="Enter your email"
+                        required
+                    >
+
+
+                    <label for="registerPassword">
+                        Password
+                    </label>
+
+                    <input
+                        type="password"
+                        id="registerPassword"
+                        placeholder="Create a password"
+                        required
+                    >
+
+
+                    <button type="submit" class="primary-button">
+                        Register
+                    </button>
+
+                </form>
+
+                <p id="authMessage" class="message"></p>
+
+            </div>
+
+        </section>
+
+
+        <section id="createPostSection" class="create-section hidden">
+
+            <div class="section-heading">
+                <div>
+                    <p class="eyebrow">AUTHENTICATED USER</p>
+                    <h2>Create a New Post</h2>
+                </div>
+            </div>
+
+
+            <form id="createPostForm" onsubmit="createPost(event)">
+
+                <input
+                    type="text"
+                    id="postTitle"
+                    placeholder="Post title"
+                    maxlength="200"
+                    required
+                >
+
+                <textarea
+                    id="postContent"
+                    placeholder="Write your blog post..."
+                    rows="6"
+                    required
+                ></textarea>
+
+                <button type="submit" class="primary-button">
+                    Publish Post
+                </button>
+
+            </form>
+
+            <p id="postMessage" class="message"></p>
+
+        </section>
+
+
+        <section class="posts-section">
+
+            <div class="section-heading">
+
+                <div>
+                    <p class="eyebrow">BLOG POSTS</p>
+                    <h2>Latest Posts</h2>
+                </div>
+
+                <button onclick="loadPosts()" class="secondary-button">
+                    Refresh
+                </button>
+
+            </div>
+
+
+            <div id="postsContainer" class="posts-grid">
+
+                <p class="loading">
+                    Loading posts...
+                </p>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <footer>
+        <p>
+            Blog Management API · FastAPI · SQLAlchemy · SQLite
+        </p>
+    </footer>
+
+
+    <script src="script.js"></script>
+
+</body>
+</html>
