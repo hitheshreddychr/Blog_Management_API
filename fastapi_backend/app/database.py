@@ -1,8 +1,14 @@
+from pathlib import Path
+
 from sqlalchemy import create_engine
 from sqlalchemy.orm import declarative_base, sessionmaker
 
 
-DATABASE_URL = "sqlite:///./blog.db"
+# Store the database in the main Blog Management API project folder.
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
+DATABASE_PATH = BASE_DIR / "blog.db"
+
+DATABASE_URL = f"sqlite:///{DATABASE_PATH.as_posix()}"
 
 
 engine = create_engine(

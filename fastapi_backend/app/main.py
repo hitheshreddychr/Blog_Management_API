@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 
 from app import models
 from app.database import Base, engine
@@ -16,7 +17,7 @@ app = FastAPI(
 )
 
 
-# Allow the frontend to communicate with the FastAPI backend.
+# Allow the frontend to communicate with the backend.
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
@@ -26,6 +27,14 @@ app.add_middleware(
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
+)
+
+
+# Serve uploaded media files.
+app.mount(
+    "/media",
+    StaticFiles(directory="media"),
+    name="media",
 )
 
 
