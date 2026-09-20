@@ -8,6 +8,10 @@ from app.models.post import Post
 from app.models.user import User
 from app.schemas.comment import CommentCreate, CommentResponse
 from app.services.email import send_notification_email
+from app.services.subscription import (
+    check_plan_limit,
+    count_user_comments,
+)
 
 
 router = APIRouter(
@@ -38,6 +42,17 @@ def create_comment(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Post not found",
         )
+
+    current_comment_count = count_user_comments(
+        db,
+        current_user.id,
+    )
+
+    check_plan_limit(
+        current_user,
+        "max_comments",
+        current_comment_count,
+    )
 
     comment = Comment(
         post_id=post_id,

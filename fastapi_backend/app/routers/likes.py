@@ -9,6 +9,10 @@ from app.models.post import Post
 from app.models.user import User
 from app.schemas.like import LikeResponse
 from app.services.email import send_notification_email
+from app.services.subscription import (
+    check_plan_limit,
+    count_user_likes,
+)
 
 
 router = APIRouter(
@@ -53,6 +57,17 @@ def like_post(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="You have already liked this post",
         )
+
+    current_like_count = count_user_likes(
+        db,
+        current_user.id,
+    )
+
+    check_plan_limit(
+        current_user,
+        "max_likes",
+        current_like_count,
+    )
 
     like = Like(
         post_id=post_id,

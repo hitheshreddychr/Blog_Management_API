@@ -17,7 +17,12 @@ class Post(Base):
         nullable=True,
     )
 
-    author_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    author_id = Column(
+        Integer,
+        ForeignKey("users.id"),
+        nullable=False,
+    )
+
     created_at = Column(
         DateTime(timezone=True),
         default=lambda: datetime.now(timezone.utc),
@@ -37,6 +42,12 @@ class Post(Base):
 
     likes = relationship(
         "Like",
+        back_populates="post",
+        cascade="all, delete-orphan",
+    )
+
+    images = relationship(
+        "PostImage",
         back_populates="post",
         cascade="all, delete-orphan",
     )
