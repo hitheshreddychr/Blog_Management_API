@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
 from app.auth.dependencies import get_current_user
@@ -7,7 +7,9 @@ from app.models.comment import Comment
 from app.models.post import Post
 from app.models.user import User
 from app.schemas.comment import CommentCreate, CommentResponse
-from app.services.email import send_notification_email
+from app.services.notification_service import (
+    send_post_activity_notification,
+)
 from app.services.subscription import (
     check_plan_limit,
     count_user_comments,
@@ -28,6 +30,7 @@ router = APIRouter(
 def create_comment(
     post_id: int,
     comment_data: CommentCreate,
+    background_tasks: BackgroundTasks,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
@@ -64,16 +67,14 @@ def create_comment(
     db.commit()
     db.refresh(comment)
 
-    send_notification_email(
+    background_tasks.add_task(
+        send_post_activity_notification,
         to_email=post.author.email,
-        subject="New Comment on Your Blog Post",
-        body=(
-            f"Hello {post.author.username},\n\n"
-            f"{current_user.username} commented on your post "
-            f"'{post.title}'.\n\n"
-            f"Comment:\n{comment.text}\n\n"
-            "Blog Management API"
-        ),
+        post_owner_name=post.author.username,
+        post_title=post.title,
+        activity_user_name=current_user.username,
+        activity_type="Comment",
+        activity_time=comment.created_at,
     )
 
     return comment

@@ -15,15 +15,11 @@ SMTP_PASSWORD = os.getenv("SMTP_PASSWORD", "")
 SMTP_FROM = os.getenv("SMTP_FROM", SMTP_USERNAME)
 
 
-def send_notification_email(
+def send_email(
     to_email: str,
     subject: str,
     body: str,
 ) -> None:
-    """
-    Send an email notification to a blog post owner.
-    """
-
     if not SMTP_HOST:
         print("Email notification skipped: SMTP_HOST is not configured.")
         return
@@ -39,22 +35,28 @@ def send_notification_email(
         print("Email notification skipped: SMTP_FROM is not configured.")
         return
 
-    message = EmailMessage()
+    try:
+        message = EmailMessage()
 
-    message["Subject"] = subject
-    message["From"] = SMTP_FROM
-    message["To"] = to_email
+        message["Subject"] = subject
+        message["From"] = SMTP_FROM
+        message["To"] = to_email
 
-    message.set_content(body)
+        message.set_content(body)
 
-    with smtplib.SMTP(
-        SMTP_HOST,
-        SMTP_PORT,
-        timeout=10,
-    ) as server:
-        server.starttls()
-        server.login(
-            SMTP_USERNAME,
-            SMTP_PASSWORD,
-        )
-        server.send_message(message)
+        with smtplib.SMTP(
+            SMTP_HOST,
+            SMTP_PORT,
+            timeout=10,
+        ) as server:
+            server.starttls()
+            server.login(
+                SMTP_USERNAME,
+                SMTP_PASSWORD,
+            )
+            server.send_message(message)
+
+        print(f"Email notification sent successfully to {to_email}")
+
+    except Exception as exc:
+        print(f"Email notification failed: {exc}")
