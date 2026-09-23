@@ -1,3 +1,5 @@
+from datetime import datetime, timezone
+
 from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
@@ -5,9 +7,11 @@ from app.auth.dependencies import get_current_user
 from app.database import get_db
 from app.models.comment import Comment
 from app.models.post import Post
+from app.models.post_activity import PostActivity
 from app.models.user import User
 from app.schemas.comment import CommentCreate, CommentResponse
 from app.services.notification_service import (
+    create_in_app_notification,
     send_post_activity_notification,
 )
 from app.services.subscription import (
@@ -57,13 +61,36 @@ def create_comment(
         current_comment_count,
     )
 
+    activity_time = datetime.now(timezone.utc)
+
     comment = Comment(
         post_id=post_id,
         user_id=current_user.id,
         text=comment_data.text,
+        created_at=activity_time,
+    )
+
+    activity = PostActivity(
+        post_id=post_id,
+        user_id=current_user.id,
+        activity_type="comment",
+        created_at=activity_time,
     )
 
     db.add(comment)
+    db.add(activity)
+
+    if post.author_id != current_user.id:
+        create_in_app_notification(
+            db=db,
+            user_id=post.author_id,
+            message=(
+                f"{current_user.username} commented on your post "
+                f'"{post.title}"'
+            ),
+            notification_type="comment",
+        )
+
     db.commit()
     db.refresh(comment)
 
@@ -74,7 +101,7 @@ def create_comment(
         post_title=post.title,
         activity_user_name=current_user.username,
         activity_type="Comment",
-        activity_time=comment.created_at,
+        activity_time=activity_time,
     )
 
     return comment

@@ -15,6 +15,9 @@ from app.schemas.subscription import (
     SubscriptionResponse,
 )
 from app.services.invoice import generate_invoice
+from app.services.notification_service import (
+    create_in_app_notification,
+)
 
 
 router = APIRouter(
@@ -89,6 +92,16 @@ def subscribe_to_plan(
     )
 
     billing_history.invoice_path = invoice_path
+
+    create_in_app_notification(
+        db=db,
+        user_id=current_user.id,
+        message=(
+            f'Your {plan.name} subscription has been activated '
+            f"successfully."
+        ),
+        notification_type="subscription",
+    )
 
     db.commit()
 

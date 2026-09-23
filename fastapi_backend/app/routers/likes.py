@@ -8,9 +8,11 @@ from app.auth.dependencies import get_current_user
 from app.database import get_db
 from app.models.like import Like
 from app.models.post import Post
+from app.models.post_activity import PostActivity
 from app.models.user import User
 from app.schemas.like import LikeResponse
 from app.services.notification_service import (
+    create_in_app_notification,
     send_post_activity_notification,
 )
 from app.services.subscription import (
@@ -74,16 +76,38 @@ def like_post(
         current_like_count,
     )
 
+    activity_time = datetime.now(timezone.utc)
+
     like = Like(
         post_id=post_id,
         user_id=current_user.id,
     )
 
+    activity = PostActivity(
+        post_id=post_id,
+        user_id=current_user.id,
+        activity_type="like",
+        created_at=activity_time,
+    )
+
     db.add(like)
+    db.add(activity)
+
+    if post.author_id != current_user.id:
+        create_in_app_notification(
+            db=db,
+            user_id=post.author_id,
+            message=(
+                f"{current_user.username} liked your post "
+                f'"{post.title}"'
+            ),
+            notification_type="like",
+        )
 
     try:
         db.commit()
         db.refresh(like)
+
     except IntegrityError:
         db.rollback()
 
@@ -99,7 +123,7 @@ def like_post(
         post_title=post.title,
         activity_user_name=current_user.username,
         activity_type="Like",
-        activity_time=datetime.now(timezone.utc),
+        activity_time=activity_time,
     )
 
     return {
@@ -132,6 +156,14 @@ def unlike_post(
             detail="You have not liked this post",
         )
 
+    activity = PostActivity(
+        post_id=post_id,
+        user_id=current_user.id,
+        activity_type="unlike",
+        created_at=datetime.now(timezone.utc),
+    )
+
+    db.add(activity)
     db.delete(like)
     db.commit()
 

@@ -1,6 +1,9 @@
 from datetime import datetime, timezone
 from zoneinfo import ZoneInfo
 
+from sqlalchemy.orm import Session
+
+from app.models.notification import Notification
 from app.services.email_service import send_email
 
 
@@ -54,3 +57,21 @@ def send_post_activity_notification(
         print(
             f"Notification service failed: {exc}"
         )
+
+
+def create_in_app_notification(
+    db: Session,
+    user_id: int,
+    message: str,
+    notification_type: str,
+) -> Notification:
+    notification = Notification(
+        user_id=user_id,
+        message=message,
+        notification_type=notification_type,
+        is_read=False,
+    )
+
+    db.add(notification)
+
+    return notification

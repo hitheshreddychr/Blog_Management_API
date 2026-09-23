@@ -11,7 +11,6 @@ class User(Base):
     username = Column(String(50), unique=True, nullable=False, index=True)
     email = Column(String(100), unique=True, nullable=False, index=True)
     hashed_password = Column(String(255), nullable=False)
-
     subscription_plan_id = Column(
         Integer,
         ForeignKey("subscription_plans.id"),
@@ -43,6 +42,18 @@ class User(Base):
 
     billing_history = relationship(
         "BillingHistory",
+        back_populates="user",
+        cascade="all, delete-orphan",
+    )
+
+    post_activities = relationship(
+        "PostActivity",
+        back_populates="user",
+        cascade="all, delete-orphan",
+    )
+
+    notifications = relationship(
+        "Notification",
         back_populates="user",
         cascade="all, delete-orphan",
     )
