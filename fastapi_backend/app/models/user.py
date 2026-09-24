@@ -57,3 +57,9 @@ class User(Base):
         back_populates="user",
         cascade="all, delete-orphan",
     )
+
+    ai_support_chats = relationship(
+        "AISupportChat",
+        back_populates="user",
+        cascade="all, delete-orphan",
+    )

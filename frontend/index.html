@@ -838,6 +838,103 @@
 </main>
 
 
+
+    <section
+        id="aiSupportWidget"
+        class="ai-support-widget hidden"
+        aria-label="AI Support Chat"
+    >
+        <button
+            id="aiSupportToggle"
+            class="ai-support-toggle"
+            type="button"
+            onclick="toggleAISupportChat()"
+            aria-label="Open AI Support"
+            aria-expanded="false"
+        >
+            <span class="ai-support-toggle-icon">💬</span>
+            <span class="ai-support-toggle-text">AI Support</span>
+        </button>
+
+        <div
+            id="aiSupportPanel"
+            class="ai-support-panel hidden"
+        >
+            <div class="ai-support-header">
+                <div>
+                    <p class="ai-support-eyebrow">ASSISTANT</p>
+                    <h3>AI Support</h3>
+                    <span>Ask about the Blog Management platform.</span>
+                </div>
+
+                <button
+                    type="button"
+                    class="ai-support-close"
+                    onclick="toggleAISupportChat()"
+                    aria-label="Close AI Support"
+                >
+                    ×
+                </button>
+            </div>
+
+            <div
+                id="aiSupportMessages"
+                class="ai-support-messages"
+            >
+                <div class="ai-support-message ai-support-message-bot">
+                    <div class="ai-support-avatar">🤖</div>
+                    <div class="ai-support-bubble">
+                        Hi! I can help you with posts, subscriptions, billing,
+                        profiles, dashboard features, comments, likes, and
+                        notifications.
+                    </div>
+                </div>
+            </div>
+
+            <div class="ai-support-history-heading">
+                <span>Recent conversations</span>
+                <button
+                    type="button"
+                    onclick="loadAISupportHistory()"
+                >
+                    Refresh
+                </button>
+            </div>
+
+            <div
+                id="aiSupportHistory"
+                class="ai-support-history"
+            >
+                <p class="ai-support-history-empty">
+                    No previous conversations.
+                </p>
+            </div>
+
+            <form
+                id="aiSupportForm"
+                class="ai-support-form"
+                onsubmit="sendAISupportMessage(event)"
+            >
+                <input
+                    type="text"
+                    id="aiSupportInput"
+                    placeholder="Ask your question..."
+                    maxlength="1000"
+                    autocomplete="off"
+                    required
+                >
+
+                <button
+                    type="submit"
+                    id="aiSupportSendButton"
+                    class="primary-button"
+                >
+                    Send
+                </button>
+            </form>
+        </div>
+    </section>
+
 <footer>
 
     <p>

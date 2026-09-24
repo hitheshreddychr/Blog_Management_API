@@ -7,3 +7,4 @@ from app.models.subscription_plan import SubscriptionPlan
 from app.models.billing_history import BillingHistory
 from app.models.post_activity import PostActivity
 from app.models.notification import Notification
+from app.models.ai_support import AISupportChat

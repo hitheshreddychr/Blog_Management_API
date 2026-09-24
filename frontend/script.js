@@ -284,6 +284,8 @@ function updateUI() {
         notificationCenter.classList.add("hidden");
     }
 
+    updateAISupportVisibility();
+
     updateImageInputMode(
         document.getElementById("createPostImages")
     );
@@ -2962,3 +2964,382 @@ document.addEventListener(
         }
     }
 );
+
+
+let aiSupportChatOpen = false;
+
+
+function updateAISupportVisibility() {
+    const widget =
+        document.getElementById("aiSupportWidget");
+
+    if (!widget) {
+        return;
+    }
+
+    if (accessToken) {
+        widget.classList.remove("hidden");
+    } else {
+        widget.classList.add("hidden");
+        closeAISupportChat();
+    }
+}
+
+
+function toggleAISupportChat() {
+    if (!accessToken) {
+        return;
+    }
+
+    const panel =
+        document.getElementById("aiSupportPanel");
+
+    const toggle =
+        document.getElementById("aiSupportToggle");
+
+    if (!panel || !toggle) {
+        return;
+    }
+
+    aiSupportChatOpen =
+        !aiSupportChatOpen;
+
+    if (aiSupportChatOpen) {
+        panel.classList.remove("hidden");
+
+        toggle.setAttribute(
+            "aria-expanded",
+            "true"
+        );
+
+        loadAISupportHistory();
+
+        setTimeout(() => {
+            const input =
+                document.getElementById("aiSupportInput");
+
+            if (input) {
+                input.focus();
+            }
+        }, 100);
+    } else {
+        panel.classList.add("hidden");
+
+        toggle.setAttribute(
+            "aria-expanded",
+            "false"
+        );
+    }
+}
+
+
+function closeAISupportChat() {
+    const panel =
+        document.getElementById("aiSupportPanel");
+
+    const toggle =
+        document.getElementById("aiSupportToggle");
+
+    aiSupportChatOpen = false;
+
+    if (panel) {
+        panel.classList.add("hidden");
+    }
+
+    if (toggle) {
+        toggle.setAttribute(
+            "aria-expanded",
+            "false"
+        );
+    }
+}
+
+
+function appendAISupportMessage(
+    message,
+    sender
+) {
+    const container =
+        document.getElementById(
+            "aiSupportMessages"
+        );
+
+    if (!container) {
+        return;
+    }
+
+    const wrapper =
+        document.createElement("div");
+
+    wrapper.className =
+        sender === "user"
+            ? "ai-support-message ai-support-message-user"
+            : "ai-support-message ai-support-message-bot";
+
+    if (sender === "user") {
+        const bubble =
+            document.createElement("div");
+
+        bubble.className =
+            "ai-support-bubble";
+
+        bubble.textContent =
+            message;
+
+        wrapper.appendChild(
+            bubble
+        );
+    } else {
+        const avatar =
+            document.createElement("div");
+
+        avatar.className =
+            "ai-support-avatar";
+
+        avatar.textContent =
+            "🤖";
+
+        const bubble =
+            document.createElement("div");
+
+        bubble.className =
+            "ai-support-bubble";
+
+        bubble.textContent =
+            message;
+
+        wrapper.appendChild(
+            avatar
+        );
+
+        wrapper.appendChild(
+            bubble
+        );
+    }
+
+    container.appendChild(
+        wrapper
+    );
+
+    container.scrollTop =
+        container.scrollHeight;
+}
+
+
+async function sendAISupportMessage(event) {
+    event.preventDefault();
+
+    if (!accessToken) {
+        return;
+    }
+
+    const input =
+        document.getElementById(
+            "aiSupportInput"
+        );
+
+    const sendButton =
+        document.getElementById(
+            "aiSupportSendButton"
+        );
+
+    if (!input || !sendButton) {
+        return;
+    }
+
+    const message =
+        input.value.trim();
+
+    if (!message) {
+        return;
+    }
+
+    appendAISupportMessage(
+        message,
+        "user"
+    );
+
+    input.value = "";
+
+    sendButton.disabled = true;
+    sendButton.textContent = "Sending...";
+
+    try {
+        const response =
+            await fetch(
+                `${API_BASE_URL}/api/ai-support/`,
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json",
+
+                        "Authorization":
+                            `Bearer ${accessToken}`,
+                    },
+
+                    body: JSON.stringify({
+                        message,
+                    }),
+                }
+            );
+
+        const data =
+            await response.json();
+
+        if (!response.ok) {
+            throw new Error(
+                data.detail ||
+                "Unable to get AI Support response"
+            );
+        }
+
+        appendAISupportMessage(
+            data.response,
+            "bot"
+        );
+
+        await loadAISupportHistory();
+
+    } catch (error) {
+        appendAISupportMessage(
+            error.message ||
+            "Unable to connect to AI Support.",
+            "bot"
+        );
+    } finally {
+        sendButton.disabled = false;
+        sendButton.textContent = "Send";
+
+        input.focus();
+    }
+}
+
+
+async function loadAISupportHistory() {
+    if (!accessToken) {
+        return;
+    }
+
+    const container =
+        document.getElementById(
+            "aiSupportHistory"
+        );
+
+    if (!container) {
+        return;
+    }
+
+    container.innerHTML =
+        '<p class="ai-support-history-empty">Loading conversations...</p>';
+
+    try {
+        const response =
+            await fetch(
+                `${API_BASE_URL}/api/ai-support/history`,
+                {
+                    headers: {
+                        "Authorization":
+                            `Bearer ${accessToken}`,
+                    },
+                }
+            );
+
+        const data =
+            await response.json();
+
+        if (!response.ok) {
+            throw new Error(
+                data.detail ||
+                "Unable to load AI Support history"
+            );
+        }
+
+        if (
+            !Array.isArray(data) ||
+            data.length === 0
+        ) {
+            container.innerHTML =
+                '<p class="ai-support-history-empty">No previous conversations.</p>';
+
+            return;
+        }
+
+        container.innerHTML =
+            data
+                .map(
+                    (chat) => `
+                        <div class="ai-support-history-item">
+                            <div class="ai-support-history-question">
+                                ${escapeHtml(chat.question)}
+                            </div>
+
+                            <div class="ai-support-history-response">
+                                ${escapeHtml(chat.response)}
+                            </div>
+
+                            <div class="ai-support-history-time">
+                                ${formatAISupportDate(chat.created_at)}
+                            </div>
+                        </div>
+                    `
+                )
+                .join("");
+
+    } catch (error) {
+        container.innerHTML =
+            `<p class="ai-support-history-empty">${escapeHtml(
+                error.message ||
+                "Unable to load conversations."
+            )}</p>`;
+    }
+}
+
+
+function formatAISupportDate(dateString) {
+    if (!dateString) {
+        return "";
+    }
+
+    const date =
+        new Date(dateString);
+
+    if (Number.isNaN(date.getTime())) {
+        return "";
+    }
+
+    return date.toLocaleString();
+}
+
+
+document.addEventListener(
+    "keydown",
+    (event) => {
+        if (event.key === "Escape") {
+            closeAISupportChat();
+        }
+    }
+);
+
+
+function clearAISupportMessages() {
+    const container =
+        document.getElementById(
+            "aiSupportMessages"
+        );
+
+    if (!container) {
+        return;
+    }
+
+    container.innerHTML = `
+        <div class="ai-support-message ai-support-message-bot">
+            <div class="ai-support-avatar">🤖</div>
+
+            <div class="ai-support-bubble">
+                Chat cleared. How can I help you?
+            </div>
+        </div>
+    `;
+}
