@@ -8,9 +8,39 @@ class User(Base):
     __tablename__ = "users"
 
     id = Column(Integer, primary_key=True, index=True)
-    username = Column(String(50), unique=True, nullable=False, index=True)
-    email = Column(String(100), unique=True, nullable=False, index=True)
-    hashed_password = Column(String(255), nullable=False)
+
+    username = Column(
+        String(50),
+        unique=True,
+        nullable=False,
+        index=True,
+    )
+
+    email = Column(
+        String(100),
+        unique=True,
+        nullable=False,
+        index=True,
+    )
+
+    hashed_password = Column(
+        String(255),
+        nullable=False,
+    )
+
+    auth_provider = Column(
+        String(30),
+        nullable=False,
+        default="local",
+    )
+
+    auth0_user_id = Column(
+        String(255),
+        unique=True,
+        nullable=True,
+        index=True,
+    )
+
     subscription_plan_id = Column(
         Integer,
         ForeignKey("subscription_plans.id"),

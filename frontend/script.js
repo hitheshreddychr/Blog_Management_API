@@ -1,6 +1,71 @@
 const API_BASE_URL = "http://127.0.0.1:8000";
 
 let accessToken = localStorage.getItem("access_token");
+
+function processAuth0Callback() {
+    const hash = window.location.hash;
+
+    if (!hash || !hash.startsWith("#")) {
+        return null;
+    }
+
+    const hashParams = new URLSearchParams(
+        hash.substring(1)
+    );
+
+    const authToken =
+        hashParams.get("auth_token");
+
+    const authError =
+        hashParams.get("auth_error");
+
+    if (authToken) {
+        accessToken = authToken;
+
+        localStorage.setItem(
+            "access_token",
+            accessToken
+        );
+
+        window.history.replaceState(
+            {},
+            document.title,
+            window.location.pathname +
+                window.location.search
+        );
+
+        return "success";
+    }
+
+    if (authError) {
+        const message =
+            decodeURIComponent(authError);
+
+        window.history.replaceState(
+            {},
+            document.title,
+            window.location.pathname +
+                window.location.search
+        );
+
+        const authMessage =
+            document.getElementById(
+                "authMessage"
+            );
+
+        if (authMessage) {
+            authMessage.textContent =
+                message;
+
+            authMessage.className =
+                "message error-message";
+        }
+
+        return "error";
+    }
+
+    return null;
+}
 let currentUserId = null;
 
 let maxImagesPerPost = 1;
@@ -21,6 +86,8 @@ let notificationDropdownOpen = false;
 
 
 document.addEventListener("DOMContentLoaded", async () => {
+    processAuth0Callback();
+
     updateUI();
 
     if (accessToken) {

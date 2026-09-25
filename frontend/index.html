@@ -1,13 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
+
     <meta
         name="viewport"
         content="width=device-width, initial-scale=1.0"
     >
+
     <title>Blog Management</title>
-    <link rel="stylesheet" href="style.css">
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
 </head>
 
 <body>
@@ -75,6 +82,7 @@
                     <div class="notification-header">
 
                         <div>
+
                             <h3>
                                 Notifications
                             </h3>
@@ -84,6 +92,7 @@
                             >
                                 No notifications
                             </span>
+
                         </div>
 
                         <button
@@ -225,6 +234,42 @@
                     Login
                 </button>
 
+
+                <div class="auth-divider">
+                    <span>OR</span>
+                </div>
+
+
+                <button
+                    type="button"
+                    class="social-login-button google-login-button"
+                    onclick="window.location.href='http://127.0.0.1:8000/auth/google'"
+                >
+                    <span class="social-login-icon">
+                        G
+                    </span>
+
+                    Continue with Google
+                </button>
+
+
+                <button
+                    type="button"
+                    class="social-login-button facebook-login-button"
+                    onclick="window.location.href='http://127.0.0.1:8000/auth/facebook'"
+                >
+                    <span class="social-login-icon">
+                        f
+                    </span>
+
+                    Continue with Facebook
+                </button>
+
+
+                <p class="social-login-info">
+                    Sign in securely using your Google or Facebook account.
+                </p>
+
             </form>
 
 
@@ -277,6 +322,42 @@
                 >
                     Register
                 </button>
+
+
+                <div class="auth-divider">
+                    <span>OR</span>
+                </div>
+
+
+                <button
+                    type="button"
+                    class="social-login-button google-login-button"
+                    onclick="window.location.href='http://127.0.0.1:8000/auth/google'"
+                >
+                    <span class="social-login-icon">
+                        G
+                    </span>
+
+                    Continue with Google
+                </button>
+
+
+                <button
+                    type="button"
+                    class="social-login-button facebook-login-button"
+                    onclick="window.location.href='http://127.0.0.1:8000/auth/facebook'"
+                >
+                    <span class="social-login-icon">
+                        f
+                    </span>
+
+                    Continue with Facebook
+                </button>
+
+
+                <p class="social-login-info">
+                    You can also create an account using Google or Facebook.
+                </p>
 
             </form>
 
@@ -359,31 +440,51 @@
             <div class="stats-grid">
 
                 <div class="stat-card">
+
                     <p class="stat-label">
                         Total Posts
                     </p>
-                    <h3 id="totalPosts">0</h3>
+
+                    <h3 id="totalPosts">
+                        0
+                    </h3>
+
                 </div>
 
                 <div class="stat-card">
+
                     <p class="stat-label">
                         Comments Received
                     </p>
-                    <h3 id="totalCommentsReceived">0</h3>
+
+                    <h3 id="totalCommentsReceived">
+                        0
+                    </h3>
+
                 </div>
 
                 <div class="stat-card">
+
                     <p class="stat-label">
                         Likes Received
                     </p>
-                    <h3 id="totalLikesReceived">0</h3>
+
+                    <h3 id="totalLikesReceived">
+                        0
+                    </h3>
+
                 </div>
 
                 <div class="stat-card">
+
                     <p class="stat-label">
                         Unlikes Received
                     </p>
-                    <h3 id="totalUnlikesReceived">0</h3>
+
+                    <h3 id="totalUnlikesReceived">
+                        0
+                    </h3>
+
                 </div>
 
             </div>
@@ -413,24 +514,39 @@
             <div class="stats-grid">
 
                 <div class="stat-card">
+
                     <p class="stat-label">
                         Comments Given
                     </p>
-                    <h3 id="totalCommentsGiven">0</h3>
+
+                    <h3 id="totalCommentsGiven">
+                        0
+                    </h3>
+
                 </div>
 
                 <div class="stat-card">
+
                     <p class="stat-label">
                         Likes Given
                     </p>
-                    <h3 id="totalLikesGiven">0</h3>
+
+                    <h3 id="totalLikesGiven">
+                        0
+                    </h3>
+
                 </div>
 
                 <div class="stat-card">
+
                     <p class="stat-label">
                         Unlikes Given
                     </p>
-                    <h3 id="totalUnlikesGiven">0</h3>
+
+                    <h3 id="totalUnlikesGiven">
+                        0
+                    </h3>
+
                 </div>
 
             </div>
@@ -759,7 +875,6 @@
                     Cancel
                 </button>
 
-
                 <button
                     type="button"
                     onclick="deletePost()"
@@ -838,102 +953,146 @@
 </main>
 
 
+<section
+    id="aiSupportWidget"
+    class="ai-support-widget hidden"
+    aria-label="AI Support Chat"
+>
 
-    <section
-        id="aiSupportWidget"
-        class="ai-support-widget hidden"
-        aria-label="AI Support Chat"
+    <button
+        id="aiSupportToggle"
+        class="ai-support-toggle"
+        type="button"
+        onclick="toggleAISupportChat()"
+        aria-label="Open AI Support"
+        aria-expanded="false"
     >
-        <button
-            id="aiSupportToggle"
-            class="ai-support-toggle"
-            type="button"
-            onclick="toggleAISupportChat()"
-            aria-label="Open AI Support"
-            aria-expanded="false"
-        >
-            <span class="ai-support-toggle-icon">💬</span>
-            <span class="ai-support-toggle-text">AI Support</span>
-        </button>
+
+        <span class="ai-support-toggle-icon">
+            💬
+        </span>
+
+        <span class="ai-support-toggle-text">
+            AI Support
+        </span>
+
+    </button>
+
+
+    <div
+        id="aiSupportPanel"
+        class="ai-support-panel hidden"
+    >
+
+        <div class="ai-support-header">
+
+            <div>
+
+                <p class="ai-support-eyebrow">
+                    ASSISTANT
+                </p>
+
+                <h3>
+                    AI Support
+                </h3>
+
+                <span>
+                    Ask about the Blog Management platform.
+                </span>
+
+            </div>
+
+            <button
+                type="button"
+                class="ai-support-close"
+                onclick="toggleAISupportChat()"
+                aria-label="Close AI Support"
+            >
+                ×
+            </button>
+
+        </div>
+
 
         <div
-            id="aiSupportPanel"
-            class="ai-support-panel hidden"
+            id="aiSupportMessages"
+            class="ai-support-messages"
         >
-            <div class="ai-support-header">
-                <div>
-                    <p class="ai-support-eyebrow">ASSISTANT</p>
-                    <h3>AI Support</h3>
-                    <span>Ask about the Blog Management platform.</span>
+
+            <div class="ai-support-message ai-support-message-bot">
+
+                <div class="ai-support-avatar">
+                    🤖
                 </div>
 
-                <button
-                    type="button"
-                    class="ai-support-close"
-                    onclick="toggleAISupportChat()"
-                    aria-label="Close AI Support"
-                >
-                    ×
-                </button>
-            </div>
-
-            <div
-                id="aiSupportMessages"
-                class="ai-support-messages"
-            >
-                <div class="ai-support-message ai-support-message-bot">
-                    <div class="ai-support-avatar">🤖</div>
-                    <div class="ai-support-bubble">
-                        Hi! I can help you with posts, subscriptions, billing,
-                        profiles, dashboard features, comments, likes, and
-                        notifications.
-                    </div>
+                <div class="ai-support-bubble">
+                    Hi! I can help you with posts, subscriptions,
+                    billing, profiles, dashboard features, comments,
+                    likes, and notifications.
                 </div>
+
             </div>
 
-            <div class="ai-support-history-heading">
-                <span>Recent conversations</span>
-                <button
-                    type="button"
-                    onclick="loadAISupportHistory()"
-                >
-                    Refresh
-                </button>
-            </div>
-
-            <div
-                id="aiSupportHistory"
-                class="ai-support-history"
-            >
-                <p class="ai-support-history-empty">
-                    No previous conversations.
-                </p>
-            </div>
-
-            <form
-                id="aiSupportForm"
-                class="ai-support-form"
-                onsubmit="sendAISupportMessage(event)"
-            >
-                <input
-                    type="text"
-                    id="aiSupportInput"
-                    placeholder="Ask your question..."
-                    maxlength="1000"
-                    autocomplete="off"
-                    required
-                >
-
-                <button
-                    type="submit"
-                    id="aiSupportSendButton"
-                    class="primary-button"
-                >
-                    Send
-                </button>
-            </form>
         </div>
-    </section>
+
+
+        <div class="ai-support-history-heading">
+
+            <span>
+                Recent conversations
+            </span>
+
+            <button
+                type="button"
+                onclick="loadAISupportHistory()"
+            >
+                Refresh
+            </button>
+
+        </div>
+
+
+        <div
+            id="aiSupportHistory"
+            class="ai-support-history"
+        >
+
+            <p class="ai-support-history-empty">
+                No previous conversations.
+            </p>
+
+        </div>
+
+
+        <form
+            id="aiSupportForm"
+            class="ai-support-form"
+            onsubmit="sendAISupportMessage(event)"
+        >
+
+            <input
+                type="text"
+                id="aiSupportInput"
+                placeholder="Ask your question..."
+                maxlength="1000"
+                autocomplete="off"
+                required
+            >
+
+            <button
+                type="submit"
+                id="aiSupportSendButton"
+                class="primary-button"
+            >
+                Send
+            </button>
+
+        </form>
+
+    </div>
+
+</section>
+
 
 <footer>
 
@@ -945,7 +1104,9 @@
 
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <script src="script.js"></script>
 
 </body>
+
 </html>

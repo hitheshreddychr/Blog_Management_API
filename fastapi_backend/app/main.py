@@ -4,7 +4,7 @@ from fastapi.openapi.utils import get_openapi
 from fastapi.staticfiles import StaticFiles
 
 from app import models
-from app.database import Base, engine
+from app.database import Base, engine, run_database_migrations
 from app.routers import (
     auth,
     comments,
@@ -16,6 +16,7 @@ from app.routers import (
     ai_support,
 )
 
+run_database_migrations()
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
