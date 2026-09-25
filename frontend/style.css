@@ -214,6 +214,109 @@ textarea:focus {
 }
 
 
+.auth-divider {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin: 24px 0 18px;
+    color: #9ca3af;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+
+.auth-divider::before,
+.auth-divider::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: #e5e7eb;
+}
+
+.auth-divider span {
+    flex-shrink: 0;
+}
+
+.social-login-button {
+    position: relative;
+    width: 100%;
+    min-height: 50px;
+    margin-top: 12px;
+    padding: 0 18px;
+    border: 1px solid #d1d5db;
+    border-radius: 9px;
+    background: #ffffff;
+    color: #1f2937;
+    cursor: pointer;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition:
+        background-color 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        transform 0.15s ease;
+}
+
+.social-login-button:hover {
+    background: #f9fafb;
+    border-color: #9ca3af;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    transform: translateY(-1px);
+}
+
+.social-login-button:active {
+    transform: translateY(0);
+}
+
+.social-login-button:focus-visible {
+    outline: 3px solid rgba(37, 99, 235, 0.18);
+    outline-offset: 2px;
+}
+
+.social-login-icon {
+    position: absolute;
+    left: 18px;
+    width: 22px;
+    height: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.social-login-icon svg {
+    display: block;
+    width: 21px;
+    height: 21px;
+}
+
+.facebook-icon {
+    color: #1877f2;
+}
+
+.facebook-icon svg {
+    width: 22px;
+    height: 22px;
+}
+
+.social-login-text {
+    display: block;
+    text-align: center;
+    line-height: 1.2;
+}
+
+.social-login-info {
+    margin-top: 16px;
+    color: #6b7280;
+    font-size: 13px;
+    line-height: 1.5;
+    text-align: center;
+}
+
+
 .dashboard-section {
     margin-top: 40px;
     margin-bottom: 50px;
@@ -1404,4 +1507,25 @@ footer {
         width: calc(100vw - 20px);
     }
 
+}
+
+
+@media (max-width: 600px) {
+    .auth-card {
+        padding: 24px 18px;
+    }
+
+    .social-login-button {
+        min-height: 48px;
+        padding: 0 14px;
+        font-size: 14px;
+    }
+
+    .social-login-icon {
+        left: 15px;
+    }
+
+    .social-login-text {
+        padding-left: 10px;
+    }
 }
