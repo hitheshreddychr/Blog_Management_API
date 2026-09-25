@@ -119,7 +119,7 @@ async function register(event) {
 
     try {
         const response = await fetch(
-            `${API_BASE_URL}/auth/register`,
+            `${API_BASE_URL}/auth/signup/`,
             {
                 method: "POST",
                 headers: {

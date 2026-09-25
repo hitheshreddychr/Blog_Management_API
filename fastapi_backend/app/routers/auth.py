@@ -111,11 +111,6 @@ def redirect_with_error(
     status_code=status.HTTP_201_CREATED,
 )
 @router.post(
-    "/signup",
-    response_model=UserResponse,
-    status_code=status.HTTP_201_CREATED,
-)
-@router.post(
     "/register",
     response_model=UserResponse,
     status_code=status.HTTP_201_CREATED,
@@ -166,10 +161,6 @@ def register(
     return user
 
 
-@router.post(
-    "/login/",
-    response_model=Token,
-)
 @router.post(
     "/login",
     response_model=Token,
@@ -272,7 +263,6 @@ def facebook_login(
 
 
 @router.get("/callback/")
-@router.get("/callback")
 async def auth0_callback(
     request: Request,
     code: str | None = None,
